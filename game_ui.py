@@ -29,6 +29,9 @@ class GameUI:
         pyautogui.mouseDown()
         pyautogui.mouseUp()
 
+    #original precision = .9 -SCarr
+    tempPrecision = .8
+
     def GetCardsFromRegion(self, x1, y1, x2, y2, precision = 0.90, caller = '', filterForSpecialCards = False):
         #print(caller)
         cardsRendered = []
@@ -38,7 +41,7 @@ class GameUI:
             #print(crd + ":" + crdpath)
             if filterForSpecialCards and int(crd[1:]) > 10:                
                 precision = 0.90
-            pos1 = imagesearcharea(crdpath, x1, y1, x2, y2, precision, im)
+            pos1 = imagesearcharea(crdpath, x1, y1, x2, y2, self.tempPrecision, im)
             if pos1[0] != -1:
                 #print(crd + " detected")
                 # TODO May be define a class for [card,pos_x,pos_y] tuple
@@ -113,7 +116,7 @@ class GameUI:
 
     def findImgAndClick(self,imageName, precision = 0.90):
         absolute_path = os.path.join(os.getcwd(), self.gv.imageFolderName, imageName)
-        pos = imagesearch(absolute_path, precision)
+        pos = imagesearch(absolute_path, self.tempPrecision)
         if pos[0] != -1:
             click_image(absolute_path, pos, "left", 0, False, offset=5)
             return True
@@ -154,7 +157,9 @@ class GameUI:
             else:
                 # Draw new card if possible
                 print("Drawing a new card")
-                self.findImgAndClick('draw_deck_card.png')
+                #self.findImgAndClick('draw_deck_card.png')
+                pyautogui.moveTo(420, 200)
+                pyautogui.click()
                 time.sleep(1)
                 cardsRendered = self.GetCardsFromRegion(self.gv.drawDeckArea[0], self.gv.drawDeckArea[1],
              self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], 0.95, "Capture Draw Deck", True)        

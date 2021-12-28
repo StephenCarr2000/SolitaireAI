@@ -24,7 +24,13 @@ class ActionNode:
     def newBranch(self, action):
         self.branches.append(ActionNode(self, action))
 
-
+    #finds the next available branch
+    def nextAvailable(self):
+        for b in self.branches:
+            if (b.badAction == False):
+                return b
+        if(self.parent!=None):
+            return self.parent.nextAvailable()
     #clears further branches
     def clear(self):
         self.branches = []
