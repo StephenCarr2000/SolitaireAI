@@ -30,7 +30,7 @@ class GameUI:
         pyautogui.mouseUp()
 
     #original precision = .9 -SCarr
-    tempPrecision = .8
+    tempPrecision = .9
 
     def GetCardsFromRegion(self, x1, y1, x2, y2, precision = 0.90, caller = '', filterForSpecialCards = False):
         #print(caller)
@@ -41,7 +41,7 @@ class GameUI:
             #print(crd + ":" + crdpath)
             if filterForSpecialCards and int(crd[1:]) > 10:                
                 precision = 0.90
-            pos1 = imagesearcharea(crdpath, x1, y1, x2, y2, self.tempPrecision, im)
+            pos1 = imagesearcharea(crdpath, x1, y1, x2, y2, precision, im)
             if pos1[0] != -1:
                 #print(crd + " detected")
                 # TODO May be define a class for [card,pos_x,pos_y] tuple
@@ -116,7 +116,7 @@ class GameUI:
 
     def findImgAndClick(self,imageName, precision = 0.90):
         absolute_path = os.path.join(os.getcwd(), self.gv.imageFolderName, imageName)
-        pos = imagesearch(absolute_path, self.tempPrecision)
+        pos = imagesearch(absolute_path, precision)
         if pos[0] != -1:
             click_image(absolute_path, pos, "left", 0, False, offset=5)
             return True
@@ -135,6 +135,25 @@ class GameUI:
     #######################################
     ### Main Functions
     #######################################
+
+    def Draw(self):
+        print("Drawing a new card")
+        #self.findImgAndClick('draw_deck_card.png')
+        pyautogui.moveTo(420, 200)
+        pyautogui.click()
+        time.sleep(1)
+        cardsRendered = self.GetCardsFromRegion(self.gv.drawDeckArea[0], self.gv.drawDeckArea[1],
+        self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], 0.95, "Capture Draw Deck", True)        
+        if len(cardsRendered) > 0:
+            self.gs.draw_deck_top_card = cardsRendered[0] 
+        return cardsRendered
+    def DrawLoop(self):
+        i=0
+        c=Card()
+        while(i<=24):
+            c=self.Draw()
+            i+=1
+            
 
     def UpdateGameState(self):
         # Render game state

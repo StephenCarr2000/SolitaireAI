@@ -14,6 +14,7 @@ class GameLogic:
 
         drawDeckCard = gs.draw_deck_top_card
         if len(drawDeckCard) > 0:
+            #integer substrisng of the card name, s1 is 1, h13, is 13 -scarr
             if int(drawDeckCard[0][1:]) == 1:
                 a1.name = 'MoveCardToDeck'
                 a1.cards.append(drawDeckCard)
@@ -23,6 +24,8 @@ class GameLogic:
             for deckCard in gs.deck_cards_top:
                 #print("DeckCard: " + deckCard[0])
                 dcardChar = deckCard[0][0]
+                
+                #checking if the int of the draw card is greater by 1 of the pile card and matches suit -scarr
                 dcardInd = int(deckCard[0][1:])
                 reqCard = dcardChar + str(dcardInd+1)                                      
                 if reqCard == drawDeckCard[0]:
@@ -39,7 +42,9 @@ class GameLogic:
         
         drawDeckCard = gs.draw_deck_top_card
         if len(drawDeckCard) > 0:
-            cardChar = drawDeckCard[0][0]                
+            #a, h, s, d
+            cardChar = drawDeckCard[0][0]
+            #1-13                
             cardInd = int(drawDeckCard[0][1:])
             
             # If it's a king card, move it to empty column if possible
@@ -53,6 +58,7 @@ class GameLogic:
                     gs.empty_column_indices.remove(gs.empty_column_indices[0])
                     return a1    
 
+            #lists the possible card to be stacked below, for a13 it would be [h12, d12] -scarr
             ToggledChars = self.GetToggledCardChar(cardChar)
             CandCardNames = []
             for tchar in ToggledChars:
@@ -64,7 +70,9 @@ class GameLogic:
                 if len(anotherColCrd) > 0:
                     if anotherColCrd[0] in CandCardNames:
                         a1.name = 'MoveCardToColumn'
+                        #from
                         a1.cards.append(drawDeckCard)
+                        #to
                         a1.cards.append(anotherColCrd)
                         gs.ui_components_to_render['draw_deck'] = []
                         gs.ui_components_to_render['columns'] = [colInd]
@@ -109,7 +117,9 @@ class GameLogic:
                         if len(anotherColCrd) > 0:
                             if anotherColCrd[0] in CandCardNames:
                                 a1.name = 'MoveCardToColumn'
+                                #from
                                 a1.cards.append(colCrd)
+                                #to
                                 a1.cards.append(anotherColCrd)
                                 gs.ui_components_to_render['columns'] = [colInd, otherColInd]
                                 return a1
@@ -154,6 +164,7 @@ class GameLogic:
         ToggledChars = []
         if curr == 'c' or curr == 's':
             ToggledChars = ['h','d']
+            
         elif curr == 'd' or curr == 'h':
             ToggledChars = ['c','s']        
         return ToggledChars        

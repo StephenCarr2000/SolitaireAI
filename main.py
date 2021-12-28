@@ -10,6 +10,7 @@ print("waited")
 gl = GameLogic()
 gui = GameUI()
 gui.focusOnEmulatorScreen()
+gui.DrawLoop()
 
 #print('test')
 try:
