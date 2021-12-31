@@ -1,9 +1,31 @@
 import os
+
+from PIL.Image import NONE
 from Card import Card
 from GameState import GameState
 from Action import Action
 
 class GameLogic:
+    
+    def PlaceAce(self, gs):
+        a1 = Action()
+        gs.ui_components_to_render = {}
+        
+        #############################
+        # Move draw deck card to Deck
+        #############################
+
+        drawDeckCard = gs.draw_deck_top_card
+        #integer substrisng of the card name, s1 is 1, h13, is 13 -scarr
+        if int(drawDeckCard[0][1:]) == 1:
+            a1.name = 'MoveCardToDeck'
+            a1.cards.append(drawDeckCard)
+            gs.ui_components_to_render['draw_deck'] = []
+            gs.ui_components_to_render['top_deck'] = []
+            return a1 , gs.ui_components_to_render
+        return None
+    
+    
     def GetNextAction(self, gs, sv):
         a1 = Action()
         gs.ui_components_to_render = {}
@@ -14,17 +36,12 @@ class GameLogic:
 
         drawDeckCard = gs.draw_deck_top_card
         if len(drawDeckCard) > 0:
-            #integer substrisng of the card name, s1 is 1, h13, is 13 -scarr
-            if int(drawDeckCard[0][1:]) == 1:
-                a1.name = 'MoveCardToDeck'
-                a1.cards.append(drawDeckCard)
-                gs.ui_components_to_render['draw_deck'] = []
-                gs.ui_components_to_render['top_deck'] = []
-                return a1
+            ace=self.PlaceAce(gs)
+            if(ace!=None):
+                a1, gs.ui_components_to_render = ace
             for deckCard in gs.deck_cards_top:
                 #print("DeckCard: " + deckCard[0])
                 dcardChar = deckCard[0][0]
-                
                 #checking if the int of the draw card is greater by 1 of the pile card and matches suit -scarr
                 dcardInd = int(deckCard[0][1:])
                 reqCard = dcardChar + str(dcardInd+1)                                      
@@ -46,7 +63,6 @@ class GameLogic:
             cardChar = drawDeckCard[0][0]
             #1-13                
             cardInd = int(drawDeckCard[0][1:])
-            
             # If it's a king card, move it to empty column if possible
             if cardInd == 13:
                 if len(gs.empty_column_indices) > 0:
@@ -95,7 +111,6 @@ class GameLogic:
                     #print(colCrd[0])
                     cardChar = colCrd[0][0]                
                     cardInd = int(colCrd[0][1:])
-                    
                     # If it's a king card, move it to empty column if possible
                     if cardInd == 13 and gs.new_cards_in_column[colInd-1] == 1:
                         if len(gs.empty_column_indices) > 0:
@@ -163,8 +178,7 @@ class GameLogic:
     def GetToggledCardChar(self, curr):
         ToggledChars = []
         if curr == 'c' or curr == 's':
-            ToggledChars = ['h','d']
-            
+            ToggledChars = ['h','d']       
         elif curr == 'd' or curr == 'h':
             ToggledChars = ['c','s']        
         return ToggledChars        

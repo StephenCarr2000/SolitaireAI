@@ -1,26 +1,17 @@
 from Action import Action
 
-
 class ActionNode:
     parent = None
     branches = []
     action = None
     badAction = False
     
-    def __init__(self):
-        self.branches = []
-        self.parent = None
-    def __init__(self, parent):
-        self.branches = []
-        parent = parent
-    def __init__(self, parent, action):
+    def __init__(self, parent=None, action=None):
         self.branches = []
         self.parent = parent
         self.action = action
 
     #create parented branch
-    def newBranch(self):
-        self.branches.append(ActionNode(self, None))
     def newBranch(self, action):
         self.branches.append(ActionNode(self, action))
 

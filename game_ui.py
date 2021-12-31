@@ -16,8 +16,9 @@ class GameUI:
     gv = GameVals()
     gs = GameState()
 
-    def __init__(self):
-        self.findImgAndClick('CollapseMenuBtn.png')
+    #useless for undo interaction
+    #def __init__(self):
+        #self.findImgAndClick('CollapseMenuBtn.png')
         
     #######################################
     ### Helper Functions
@@ -30,7 +31,7 @@ class GameUI:
         pyautogui.mouseUp()
 
     #original precision = .9 -SCarr
-    tempPrecision = .9
+    tempPrecision = .81125
 
     def GetCardsFromRegion(self, x1, y1, x2, y2, precision = 0.90, caller = '', filterForSpecialCards = False):
         #print(caller)
@@ -141,18 +142,12 @@ class GameUI:
         #self.findImgAndClick('draw_deck_card.png')
         pyautogui.moveTo(420, 200)
         pyautogui.click()
-        time.sleep(1)
+        time.sleep(.05)
         cardsRendered = self.GetCardsFromRegion(self.gv.drawDeckArea[0], self.gv.drawDeckArea[1],
-        self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], 0.95, "Capture Draw Deck", True)        
+        self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], self.tempPrecision, "Capture Draw Deck", True)        
         if len(cardsRendered) > 0:
             self.gs.draw_deck_top_card = cardsRendered[0] 
         return cardsRendered
-    def DrawLoop(self):
-        i=0
-        c=Card()
-        while(i<=24):
-            c=self.Draw()
-            i+=1
             
 
     def UpdateGameState(self):
@@ -170,7 +165,7 @@ class GameUI:
         if "draw_deck" in self.gs.ui_components_to_render:
             self.gs.draw_deck_top_card.clear()  
             cardsRendered = self.GetCardsFromRegion(self.gv.drawDeckArea[0], self.gv.drawDeckArea[1],
-             self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], 0.95, "Capture Draw Deck", True)        
+             self.gv.drawDeckArea[2], self.gv.drawDeckArea[3], self.tempPrecision, "Capture Draw Deck", True)        
             if len(cardsRendered) > 0:
                 self.gs.draw_deck_top_card = cardsRendered[0] 
             else:
@@ -191,7 +186,7 @@ class GameUI:
 
         if "top_deck" in self.gs.ui_components_to_render:
             self.gs.deck_cards_top.clear()
-            cardsRendered = self.GetCardsFromRegion(self.gv.deckArea[0],self.gv.deckArea[1],self.gv.deckArea[2],self.gv.deckArea[3], 0.95, "Capture Deck")
+            cardsRendered = self.GetCardsFromRegion(self.gv.deckArea[0],self.gv.deckArea[1],self.gv.deckArea[2],self.gv.deckArea[3], self.tempPrecision, "Capture Deck")
             for crd in cardsRendered:
                 self.gs.deck_cards_top.append(crd)
 
@@ -216,7 +211,7 @@ class GameUI:
                     currNewCardsInColumn.append(self.gs.new_cards_in_column[i])
                 else:
                     print("Rendering Column " + str(i+1))
-                    cardsRendered = self.GetCardsFromRegion(left, 325, left+self.gv.columnWidth, 1050, 0.95, "Capture Column Cards", True)            
+                    cardsRendered = self.GetCardsFromRegion(left, 325, left+self.gv.columnWidth, 1050, self.tempPrecision, "Capture Column Cards", True)            
                     crdToAdd = []
                     if len(cardsRendered) > 0:
                         crdToAdd = cardsRendered[0]   
@@ -297,8 +292,9 @@ class GameUI:
         #return
         
         if a.name == 'DrawNewCard':
-            if not self.findImgAndClick('draw_deck_card.png'):
-                self.findImgAndClick('redraw_deck_card.png')
+            pyautogui.moveTo(420, 200)
+            pyautogui.click()
+            time.sleep(.01)
         elif a.name == 'MoveCardToDeck':
             print(a.cards[0])
             pyautogui.moveTo(a.cards[0][1],a.cards[0][2])
