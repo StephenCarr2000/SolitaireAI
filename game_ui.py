@@ -109,7 +109,7 @@ class GameUI:
         im = region_grabber((x1-30, y1-150, x1+120, y1-10))
         #im.save('debug_new_card.png')
         absolute_path = os.path.join(os.getcwd(), self.gv.imageFolderName, 'Slices','NewCardBorder.png')
-        pos = imagesearcharea(absolute_path, x1-30, y1-150, x1+120, y1-10, 0.80, im)
+        pos = imagesearcharea(absolute_path, x1-30, y1-150, x1+120, y1-10, self.tempPrecision-0.3, im)
         if pos[0] != -1:
             return True
         return False

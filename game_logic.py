@@ -37,8 +37,9 @@ class GameLogic:
         drawDeckCard = gs.draw_deck_top_card
         if len(drawDeckCard) > 0:
             ace=self.PlaceAce(gs)
-            if(ace!=None):
+            if(type(ace) is tuple):
                 a1, gs.ui_components_to_render = ace
+                return a1
             for deckCard in gs.deck_cards_top:
                 #print("DeckCard: " + deckCard[0])
                 dcardChar = deckCard[0][0]
