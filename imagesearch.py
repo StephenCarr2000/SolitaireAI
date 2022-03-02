@@ -64,6 +64,8 @@ def imagesearcharea(image, x1, y1, x2, y2, precision=0.8, im=None):
     template = cv2.imread(image, 0)
 
     res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+    #res=cv2.matchTemplate(cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR), cv2.imread(image, cv2.IMREAD_COLOR),cv2.TM_CCORR_NORMED)
+    #res = cv2.matchTemplate(img_gray, template, cv2.TM_CCORR_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     if max_val < precision:
         return [-1, -1]
@@ -144,6 +146,8 @@ def imagesearch(image, precision=0.8):
     template.shape[::-1]
 
     res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+    #res=cv2.matchTemplate(cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR), cv2.imread(image, cv2.IMREAD_COLOR),cv2.TM_CCORR_NORMED)
+    #res = cv2.matchTemplate(img_gray, template, cv2.TM_CCORR_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     #print("min_val:" + str(min_val) + ", max_val:" + str(max_val) + ",min_loc" + str(min_loc) + ",max_loc:" + str(max_loc))
     if max_val < precision:
@@ -255,6 +259,8 @@ def imagesearch_count(image, x1, y1, x2, y2, precision=0.9):
     template = cv2.imread(image, 0)
     w, h = template.shape[::-1]
     res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+    #res=cv2.matchTemplate(cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR), cv2.imread(image, cv2.IMREAD_COLOR),cv2.TM_CCORR_NORMED)
+    #res = cv2.matchTemplate(img_gray, template, cv2.TM_CCORR_NORMED)
     loc = np.where(res >= precision)
     count = 0
     for pt in zip(*loc[::-1]):  # Swap columns and rows
@@ -266,3 +272,7 @@ def imagesearch_count(image, x1, y1, x2, y2, precision=0.9):
 
 def r(num, rand):
     return num + rand * random.random()
+
+#def matchCall(img):
+#        cv2.imread(image, 0)
+#        return cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)

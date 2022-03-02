@@ -16,9 +16,9 @@ class GameUI:
     gv = GameVals()
     gs = GameState()
 
-    #useless for undo interaction
-    #def __init__(self):
-        #self.findImgAndClick('CollapseMenuBtn.png')
+    #useless for undo interaction but needed to detect full screen
+    def __init__(self):
+        self.findImgAndClick('CollapseMenuBtn.png')
         
     #######################################
     ### Helper Functions
@@ -31,7 +31,7 @@ class GameUI:
         pyautogui.mouseUp()
 
     #original precision = .9 -SCarr
-    tempPrecision = .81125
+    tempPrecision = .95 #.81125
 
     def GetCardsFromRegion(self, x1, y1, x2, y2, precision = 0.90, caller = '', filterForSpecialCards = False):
         #print(caller)
@@ -300,12 +300,12 @@ class GameUI:
             pyautogui.moveTo(a.cards[0][1],a.cards[0][2])
             pyautogui.mouseDown()
             pyautogui.mouseUp()
-            pyautogui.mouseDown()
-            pyautogui.mouseUp()
+            #pyautogui.mouseDown()
+            #pyautogui.mouseUp()
             time.sleep(0.5)
         elif a.name == 'MoveCardToColumn':            
             #print(a.cards)
-            pyautogui.moveTo(a.cards[0][1]+50,a.cards[0][2]+50)
+            pyautogui.moveTo(a.cards[0][1],a.cards[0][2]) #pyautogui.moveTo(a.cards[0][1]+50,a.cards[0][2]+50) -don't know why this would be different than last -SCarr
             pyautogui.mouseDown()
             pyautogui.mouseUp()            
             #time.sleep(1)

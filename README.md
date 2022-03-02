@@ -15,7 +15,10 @@ Complete AI that plays and wins the game
 # Running
 
 - Make sure you have default resolution in Windows to 1920 x 1080
+    - Set SCALE in resolution settings to 100%
+        many PC's default to 150% or 125% 
 - Open "Micorsoft Solitaire Collection" application (you can type it in the search bar after pressing start on Windows)
 - Go to Klondike game with "Easy" level and "Single draw card" version
 - Go to main directory of this project and type "python main.py"
 - Go to Solitaire game screen and select full screen
+- enable "single tap to move" in game options 
