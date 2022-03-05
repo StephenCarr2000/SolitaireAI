@@ -42,10 +42,13 @@ class GameLogic:
                 return a1
             for deckCard in gs.deck_cards_top:
                 #print("DeckCard: " + deckCard[0])
+                
+                #suit
                 dcardChar = deckCard[0][0]
-                #checking if the int of the draw card is greater by 1 of the pile card and matches suit -scarr
+                #value
                 dcardInd = int(deckCard[0][1:])
-                reqCard = dcardChar + str(dcardInd+1)                                      
+                reqCard = dcardChar + str(dcardInd+1)
+                #checking if the int of the draw card is greater by 1 of the pile card and matches suit -scarr                                      
                 if reqCard == drawDeckCard[0]:
                     #print(reqCard)
                     a1.name = 'MoveCardToDeck'
@@ -169,6 +172,62 @@ class GameLogic:
                         gs.ui_components_to_render['columns'] = [colInd]
                         return a1 
             colInd += 1
+        
+        #############################
+        # Move Deck card to column
+        #############################
+        colInd = 1
+        for DeckCard in gs.deck_cards_top:
+            if len(DeckCard) > 0:
+                #a, h, s, d
+                cardChar = DeckCard[0][0]
+                #1-13                
+                cardInd = int(DeckCard[0][1:])
+
+                #queen
+                queenCards = []
+                lessCards = []
+
+                #lists the possible card to be stacked below, for a13 it would be [h12, d12] -scarr
+                ToggledChars = self.GetToggledCardChar(cardChar)
+                CandCardNames = []
+                for tchar in ToggledChars:
+                    candCardName = tchar + str(cardInd+1)
+                    CandCardNames.append(candCardName)
+                    queenCards.append(tchar + str(12))
+                    queenCards.append(tchar + str(cardInd-1))
+                    
+                colInd = 1
+                for anotherColCrd in gs.column_all_cards:
+                    if len(anotherColCrd) > 0:
+                        # If it's a king card, move it to empty column if an opposite queen exists without a king
+                        if anotherColCrd[0] in queenCards and cardInd == 13:
+                            if len(gs.empty_column_indices) > 0: #and gs.column_cards:#
+                                    a1.name = 'MoveCardToColumn'
+                                    a1.cards.append(DeckCard)                        
+                                    a1.cards.append(['empty_col',gs.empty_column_indices[0]])
+                                    gs.ui_components_to_render['top_deck'] = []
+                                    gs.ui_components_to_render['columns'] = [gs.empty_column_indices[0]]
+                                    gs.empty_column_indices.remove(gs.empty_column_indices[0])
+                                    return a1   
+                        elif anotherColCrd[0] in CandCardNames:
+                            #checks if a card below the current cardInd exists
+                            lessIncluded = False
+                            for lcard in lessCards:
+                                if lcard in gs.column_all_cards:
+                                    lessIncluded = True
+                                    break
+                            if lessIncluded:
+                                a1.name = 'MoveCardToColumn'
+                                #from
+                                a1.cards.append(DeckCard)
+                                #to
+                                a1.cards.append(anotherColCrd)
+                                gs.ui_components_to_render['top_deck'] = []
+                                gs.ui_components_to_render['columns'] = [colInd]
+                                return a1  
+                    colInd += 1  
+        #TODO modify a1 and UI.process action if card does not register
 
             
         # Default action will be to draw card

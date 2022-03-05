@@ -137,6 +137,12 @@ class GameUI:
     ### Main Functions
     #######################################
 
+    def Undo(self):
+        #undo action
+        pyautogui.press(['ctrl', 'z'])
+        #TODO undo proccessing
+
+
     def Draw(self):
         print("Drawing a new card")
         #self.findImgAndClick('draw_deck_card.png')

@@ -32,10 +32,11 @@ last_action=None
 #print('test')
 try:
     while 1:
+        #finds current card locations
         print("Updating Game State")
-
         gui.UpdateGameState()
     
+        #evaluates next move option
         print("Calculating Action")
         next_action = gl.GetNextAction(gui.gs, gui.gv)
         #if(last_action==next_action):
@@ -48,6 +49,7 @@ try:
         #if inpstr != "y":
         #    exit(0)
 
+        #acts on the current move
         gui.ProcessAction(next_action)
         last_action=next_action
 
